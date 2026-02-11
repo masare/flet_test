@@ -87,9 +87,10 @@ def main(page: ft.Page):
     page.title = "Calc App"
     # create application instance
     calc = CalculatorApp()
+    calc2 = CalculatorApp()
 
     # add application's root control to the page
-    page.add(calc)
+    page.add(calc, calc2)
 
 
 if __name__ == "__main__":
