@@ -82,6 +82,13 @@ class CalculatorApp(ft.Container):
             ]
         )
 
+    def button_clicked(self, e):
+        data = e.control.content
+        print(f"Button clicked with data = {data}")
+        if data == "AC":
+            self.result.value = "0"
+        
+
 
 def main(page: ft.Page):
     page.title = "Calc App"
