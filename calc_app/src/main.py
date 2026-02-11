@@ -1,25 +1,31 @@
 import flet as ft
 
-
 def main(page: ft.Page):
-    counter = ft.Text("0", size=50, data=0)
+    page.title = "Calc App"
+    result = ft.Text(value="0")
 
-    def increment_click(e):
-        counter.data += 1
-        counter.value = str(counter.data)
-
-    page.floating_action_button = ft.FloatingActionButton(
-        icon=ft.Icons.ADD, on_click=increment_click
-    )
     page.add(
-        ft.SafeArea(
-            expand=True,
-            content=ft.Container(
-                content=counter,
-                alignment=ft.Alignment.CENTER,
-            ),
-        )
+        result,
+        ft.Button("AC"),
+        ft.Button("+/-"),
+        ft.Button("%"),
+        ft.Button("/"),
+        ft.Button("7"),
+        ft.Button("8"),
+        ft.Button("9"),
+        ft.Button("*"),
+        ft.Button("4"),
+        ft.Button("5"),
+        ft.Button("6"),
+        ft.Button("-"),
+        ft.Button("1"),
+        ft.Button("2"),
+        ft.Button("3"),
+        ft.Button("+"),
+        ft.Button("0"),
+        ft.Button("."),
+        ft.Button("="),
     )
 
-
-ft.run(main)
+if __name__ == '__main__':
+    ft.run(main)
