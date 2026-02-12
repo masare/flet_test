@@ -42,41 +42,41 @@ class CalculatorApp(ft.Container):
                 ),
                 ft.Row(
                     controls=[
-                        ExtraActionButton(content="AC"),
-                        ExtraActionButton(content="+/-"),
-                        ExtraActionButton(content="%"),
-                        ActionButton(content="/"),
+                        ExtraActionButton(content="AC", on_click=self.button_clicked),
+                        ExtraActionButton(content="+/-", on_click=self.button_clicked),
+                        ExtraActionButton(content="%", on_click=self.button_clicked),
+                        ActionButton(content="/", on_click=self.button_clicked),
                     ]
                 ),
                 ft.Row(
                     controls=[
-                        DigitButton(content="7"),
-                        DigitButton(content="8"),
-                        DigitButton(content="9"),
-                        ActionButton(content="*"),
+                        DigitButton(content="7", on_click=self.button_clicked),
+                        DigitButton(content="8", on_click=self.button_clicked),
+                        DigitButton(content="9", on_click=self.button_clicked),
+                        ActionButton(content="*", on_click=self.button_clicked),
                     ]
                 ),
                 ft.Row(
                     controls=[
-                        DigitButton(content="4"),
-                        DigitButton(content="5"),
-                        DigitButton(content="6"),
-                        ActionButton(content="-"),
+                        DigitButton(content="4", on_click=self.button_clicked),
+                        DigitButton(content="5", on_click=self.button_clicked),
+                        DigitButton(content="6", on_click=self.button_clicked),
+                        ActionButton(content="-", on_click=self.button_clicked),
                     ]
                 ),
                 ft.Row(
                     controls=[
-                        DigitButton(content="1"),
-                        DigitButton(content="2"),
-                        DigitButton(content="3"),
-                        ActionButton(content="+"),
+                        DigitButton(content="1", on_click=self.button_clicked),
+                        DigitButton(content="2", on_click=self.button_clicked),
+                        DigitButton(content="3", on_click=self.button_clicked),
+                        ActionButton(content="+", on_click=self.button_clicked),
                     ]
                 ),
                 ft.Row(
                     controls=[
-                        DigitButton(content="0", expand=2),
-                        DigitButton(content="."),
-                        ActionButton(content="="),
+                        DigitButton(content="0", expand=2, on_click=self.button_clicked),
+                        DigitButton(content=".", on_click=self.button_clicked),
+                        ActionButton(content="=", on_click=self.button_clicked),
                     ]
                 ),
             ]
@@ -87,17 +87,33 @@ class CalculatorApp(ft.Container):
         print(f"Button clicked with data = {data}")
         if data == "AC":
             self.result.value = "0"
-        
-
+        elif data in ".-+*/%":
+            if self.result.value[-1] in ".-+*/%":
+                self.result.value = self.result.value[:-1] + data
+            else:
+                self.result.value += data
+        elif data == "=":
+            try:
+                if not self.result.value[-1] in ".-+*/%":
+                    self.result.value = str(eval(self.result.value))
+            except ZeroDivisionError:
+                self.result.value = "Error"
+        elif data in "0123456789":
+            if self.result.value == "0":
+                self.result.value = data
+            else:
+                self.result.value += data
+        else:
+            pass
+    
 
 def main(page: ft.Page):
     page.title = "Calc App"
     # create application instance
     calc = CalculatorApp()
-    calc2 = CalculatorApp()
 
     # add application's root control to the page
-    page.add(calc, calc2)
+    page.add(calc)
 
 
 if __name__ == "__main__":
