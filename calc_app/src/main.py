@@ -87,6 +87,11 @@ class CalculatorApp(ft.Container):
         print(f"Button clicked with data = {data}")
         if data == "AC":
             self.result.value = "0"
+        elif data == "+/-":
+            if self.result.value[0] == "-":
+                self.result.value = self.result.value[1:]
+            else:
+                self.result.value = "-" + self.result.value
         elif data in ".-+*/%":
             if self.result.value[-1] in ".-+*/%":
                 self.result.value = self.result.value[:-1] + data
@@ -103,8 +108,9 @@ class CalculatorApp(ft.Container):
                 self.result.value = data
             else:
                 self.result.value += data
-        else:
-            pass
+        
+        if self.result.value[-2:] == ".0":
+            self.result.value = self.result.value[:-2]
     
 
 def main(page: ft.Page):
