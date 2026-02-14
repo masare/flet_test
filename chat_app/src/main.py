@@ -8,6 +8,53 @@ class Message:
     text: str
     message_type: str
 
+@ft.control
+class ChatMessage(ft.Row):
+    def __init__(self, message: Message):
+        super().__init__()
+        self.message = message
+        self.vertical_alignment = ft.CrossAxisAlignment.START
+        self.controls = [
+            ft.CircleAvatar(
+                content=ft.Text(self.get_initials(self.message.user)),
+                color=ft.Colors.WHITE,
+                bgcolor=self.get_avatar_color(self.message.user),
+            ),
+            ft.Column(
+                tight=True,
+                spacing=5,
+                controls=[
+                    ft.Text(self.message.user, weight=ft.FontWeight.BOLD),
+                    ft.Text(self.message.text, selectable=True),
+                ]
+            )
+        ]
+    
+    def get_initials(self, user_name: str):
+        if user_name:
+            # return user_name[:1].capitalize()
+            return ''.join(un[0] for un in user_name.split()).upper()
+        else:
+            return "Unknown" 
+        
+    def get_avatar_color(self, user_name: str):
+        colors_lookup = [
+            ft.Colors.AMBER,
+            ft.Colors.BLUE,
+            ft.Colors.BROWN,
+            ft.Colors.CYAN,
+            ft.Colors.GREEN,
+            ft.Colors.INDIGO,
+            ft.Colors.LIME,
+            ft.Colors.ORANGE,
+            ft.Colors.PINK,
+            ft.Colors.PURPLE,
+            ft.Colors.RED,
+            ft.Colors.TEAL,
+            ft.Colors.YELLOW,
+        ]
+        return colors_lookup[hash(user_name) % len(colors_lookup)]
+
 def main(page: ft.Page):
     page.title = ft.Text('Chat App')
     chat = ft.Column()
@@ -17,7 +64,8 @@ def main(page: ft.Page):
 
     def on_message(message: Message):
         if message.message_type == "chat message":
-            chat.controls.append(ft.Text(f"{message.user}: {message.text}"))
+            # chat.controls.append(ft.Text(f"{message.user}: {message.text}"))
+            chat.controls.append(ChatMessage(message))
         elif message.message_type == "login message":
             chat.controls.append(
                 ft.Text(message.text, italic=True, color=ft.Colors.BLACK_45, size=12)
