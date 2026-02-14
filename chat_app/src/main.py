@@ -1,0 +1,25 @@
+import flet as ft
+
+
+def main(page: ft.Page):
+    page.title = ft.Text('Chat App')
+    chat = ft.Column()
+    new_message = ft.TextField()
+
+    def send_click(e):
+        chat.controls.append(ft.Text(new_message.value))
+        new_message.value = ""
+    
+    page.add(
+        chat,
+        ft.Row(
+            controls=
+            [
+                new_message,
+                ft.Button("Send", on_click=send_click),
+            ]
+        )
+    )
+
+if __name__ == '__main__':
+    ft.run(main)
