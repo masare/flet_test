@@ -57,25 +57,27 @@ class ChatMessage(ft.Row):
 
 def main(page: ft.Page):
     page.title = ft.Text('Chat App')
-    chat = ft.Column()
+    chat = ft.ListView(
+        expand=True,
+        spacing=10,
+        auto_scroll=True,
+    )
     new_message = ft.TextField()
     user_name = ft.TextField(label="Enter your name")
 
 
     def on_message(message: Message):
-        if message.message_type == "chat message":
-            # chat.controls.append(ft.Text(f"{message.user}: {message.text}"))
-            chat.controls.append(ChatMessage(message))
-        elif message.message_type == "login message":
-            chat.controls.append(
-                ft.Text(message.text, italic=True, color=ft.Colors.BLACK_45, size=12)
-            )
+        if message.message_type == "chat_message":
+            m = ChatMessage(message)
+        elif message.message_type == "login_message":
+            m = ft.Text(message.text, italic=True, color=ft.Colors.BLACK_45, size=12)
+        chat.controls.append(m)
         page.update()
 
     page.pubsub.subscribe(on_message)
 
     def send_click(e):
-        page.pubsub.send_all(Message(user=page.session.store.get("user_name"), text=new_message.value, message_type="chat message"))
+        page.pubsub.send_all(Message(user=page.session.store.get("user_name"), text=new_message.value, message_type="chat_message"))
         # chat.controls.append(ft.Text(new_message.value))
         new_message.value = ""
     
@@ -86,7 +88,7 @@ def main(page: ft.Page):
         else:
             page.session.store.set("user_name", user_name.value)
             page.pop_dialog()
-            page.pubsub.send_all(Message(user=user_name.value, text=f"{user_name.value} has joined the chat", message_type="login message"))
+            page.pubsub.send_all(Message(user=user_name.value, text=f"{user_name.value} has joined the chat", message_type="login_message"))
         page.update()
 
     page.show_dialog(
@@ -102,8 +104,15 @@ def main(page: ft.Page):
         )
     )
 
+    # Add everything to the page
     page.add(
-        chat,
+        ft.Container(
+            content=chat,
+            border=ft.Border.all(1, ft.Colors.OUTLINE),
+            border_radius=5,
+            padding=10,
+            expand=True,
+        ),
         ft.Row(
             controls=
             [
