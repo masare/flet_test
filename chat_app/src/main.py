@@ -57,8 +57,6 @@ class ChatMessage(ft.Row):
 
 def main(page: ft.Page):
     page.title = ft.Text('Chat App')
-    
-    user_name = ft.TextField(label="Enter your name")
 
 
     def on_message(message: Message):
@@ -85,6 +83,13 @@ def main(page: ft.Page):
             page.pop_dialog()
             page.pubsub.send_all(Message(user=user_name.value, text=f"{user_name.value} has joined the chat", message_type="login_message"))
         page.update()
+
+    # chat user
+    user_name = ft.TextField( 
+        label="Enter your name to join chat",
+        autofocus=True,
+        on_submit=join_chat
+    )
 
     page.show_dialog(
         ft.AlertDialog(
