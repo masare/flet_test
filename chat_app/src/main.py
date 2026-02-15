@@ -70,15 +70,17 @@ def main(page: ft.Page):
 
     page.pubsub.subscribe(on_message)
 
-    def send_click(e):
+    async def send_click(e):
         if new_message.value != "":
             page.pubsub.send_all(
                 Message(
                     user=page.session.store.get("user_name"),
                     text=new_message.value, 
-                    message_type="chat_message")
+                    message_type="chat_message"
                 )
+            )
             new_message.value = ""
+            await new_message.focus()
     
     def join_chat(e):
         if not user_name.value:
