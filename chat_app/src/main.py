@@ -57,12 +57,7 @@ class ChatMessage(ft.Row):
 
 def main(page: ft.Page):
     page.title = ft.Text('Chat App')
-    chat = ft.ListView(
-        expand=True,
-        spacing=10,
-        auto_scroll=True,
-    )
-    new_message = ft.TextField()
+    
     user_name = ft.TextField(label="Enter your name")
 
 
@@ -102,6 +97,25 @@ def main(page: ft.Page):
             ],
             actions_alignment=ft.MainAxisAlignment.END,
         )
+    )
+
+    # chat messages
+    chat = ft.ListView(
+        expand=True,
+        spacing=10,
+        auto_scroll=True,
+    )
+
+    # A new message entry form
+    new_message = ft.TextField(
+        hint_text="Write a message...",
+        autofocus=True,
+        shift_enter=True,
+        min_lines=1,
+        max_lines=5,
+        filled=True,
+        expand=True,
+        on_submit=send_click
     )
 
     # Add everything to the page
