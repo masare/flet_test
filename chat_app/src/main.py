@@ -131,7 +131,11 @@ def main(page: ft.Page):
             controls=
             [
                 new_message,
-                ft.Button("Send", on_click=send_click),
+                ft.IconButton(
+                    icon=ft.Icons.SEND_ROUNDED,
+                    tooltip="Send message", 
+                    on_click=send_click
+                ),
             ]
         )
     )
