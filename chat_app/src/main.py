@@ -56,6 +56,7 @@ class ChatMessage(ft.Row):
         return colors_lookup[hash(user_name) % len(colors_lookup)]
 
 def main(page: ft.Page):
+    page.horizontal_alignment = ft.CrossAxisAlignment.STRETCH
     page.title = ft.Text('Chat App')
 
 
@@ -85,29 +86,35 @@ def main(page: ft.Page):
             user_name.update()
         else:
             page.session.store.set("user_name", user_name.value)
-            page.pop_dialog()
-            page.pubsub.send_all(Message(user=user_name.value, text=f"{user_name.value} has joined the chat", message_type="login_message"))
+            welcome_dlg.open = False
+            new_message.prefix = ft.Text(f"{user_name.value}: ")
+            page.pubsub.send_all(
+                Message(
+                    user=user_name.value, 
+                    text=f"{user_name.value} has joined the chat", 
+                    message_type="login_message")
+                )
         page.update()
 
-    # chat user
+    # A dialog that asks for user display name
     user_name = ft.TextField( 
         label="Enter your name to join chat",
         autofocus=True,
         on_submit=join_chat
     )
 
-    page.show_dialog(
-        ft.AlertDialog(
+    welcome_dlg = ft.AlertDialog(
             open=True,
             modal=True,
             title=ft.Text("Welcome!"),
-            content=ft.Column([user_name], tight=True),
+            content=ft.Column([user_name], width=300, height=70, tight=True),
             actions=[
                 ft.Button(content='Join chat', on_click=join_chat)
             ],
             actions_alignment=ft.MainAxisAlignment.END,
         )
-    )
+    
+    page.overlay.append(welcome_dlg)
 
     # chat messages
     chat = ft.ListView(
